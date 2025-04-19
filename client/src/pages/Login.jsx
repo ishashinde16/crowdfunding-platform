@@ -2,15 +2,17 @@ import React from 'react'
 import {Link, useNavigate} from 'react-router-dom'
 import { useState } from 'react'
 import axios from "axios"
+import { useContext } from "react";
+import { UserContext } from "E:/ISL website/crowdfunding-platform/client/src/App.jsx";
 
-const Login = () => {
+const Login = (props) => {
   const [inputs, setInputs] = useState({
-    name:"",
+    email:"",
     password:"",
   })
 
   const [err,setError] = useState(null)
-
+  const { email, setEmail } = useContext(UserContext);
   const navigate = useNavigate()
 
   const handleChange = e =>{
@@ -20,9 +22,9 @@ const Login = () => {
   const handleSubmit =async e =>{
     e.preventDefault()
     try{
-      await axios.post("http://localhost:8800/api/auth/login", inputs)
+      setEmail(inputs.email)
+      const res = await axios.post("http://localhost:8800/api/auth/login", inputs)
       navigate("/")
-
       console.log(res)
     }
     catch(err){
@@ -33,9 +35,9 @@ const Login = () => {
 
   return (
     <div className='auth'>
-        <h1>Login</h1>
+        <h1>Email</h1>
         <form>
-        <input required type="text" placeholder='name' name='name' onChange={handleChange}/>
+        <input required type="text" placeholder='email' name='email' onChange={handleChange}/>
             <input required type="password" placeholder='password' name='password' onChange={handleChange}/>
             <button onClick={handleSubmit}>Login</button>
             {err && <p>{err}</p>}

@@ -1,9 +1,9 @@
 import {
   createBrowserRouter,
   RouterProvider,
-  Route,
   Outlet,
-} from "react-router";
+} from "react-router-dom"; // 🔁 use react-router-dom, not "react-router"
+import React, { useState, useContext, useEffect, createContext } from 'react';
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Single from "./pages/Single";
@@ -13,53 +13,79 @@ import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./style.scss";
 
+// ✅ Create context
+export const UserContext = createContext();
+
+// ✅ Layout component
 const Layout = () => {
   return (
     <>
-    <Navbar/>
-    <Outlet/>
-    <Footer/>
+      <Navbar />
+      <Outlet />
+      <Footer />
     </>
-  )
-}
+  );
+};
 
+// ✅ Define router
 const router = createBrowserRouter([
   {
     path: "/",
-    element: <Layout/>,
+    element: <Layout />,
     children: [
       {
-       path:"/",
-       element:<Home/>
+        path: "/",
+        element: <Home />,
       },
       {
-        path:"/post/:id",
-        element:<Single/>
-       },
-       {
-        path:"/campaign",
-        element:<Campaign/>
-       },
-    ]
+        path: "/post/:id",
+        element: <Single />,
+      },
+      {
+        path: "/campaign",
+        element: <Campaign />,
+      },
+    ],
   },
   {
     path: "/register",
-    element: <Register/>,
+    element: <Register />,
   },
   {
     path: "/login",
-    element: <Login/>,
+    element: <Login />,
   },
+]);
 
-]); 
-
+// ✅ App component with context
 function App() {
-  return <div className="app">
-    <div className="container">
-    <RouterProvider router={router}></RouterProvider>
-    </div>
-  </div>;
-}
+  const [email, setEmail] = useState("");
 
+  useEffect(() => {
+    const savedEmail = localStorage.getItem("email");
+    console.log("Retrieved email from localStorage:", savedEmail); // Log email
+    if (savedEmail) {
+      setEmail(JSON.parse(savedEmail)); // Set email if it exists in localStorage
+    }
+  }, []);
+
+  // Save email to localStorage when it changes
+  useEffect(() => {
+    if (email) {
+      console.log("Saving email to localStorage:", email); // Log email
+      localStorage.setItem("email", JSON.stringify(email)); // Save email when it changes
+    }
+  }, [email]);
+
+  return (
+    <UserContext.Provider value={{ email, setEmail }}>
+      <div className="app">
+        <div className="container">
+          <RouterProvider router={router} />
+        </div>
+      </div>
+    </UserContext.Provider>
+  );
+}
 
 export default App;

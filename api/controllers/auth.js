@@ -32,15 +32,15 @@ export const register = (req, res) => {
 export const login = (req, res) => {
   
   //CHECK USER
-  const q = "SELECT * from users WHERE name=?"
-  db.query(q, [req.body.name], (err, data) => {
+  const q = "SELECT * from users WHERE email=?"
+  db.query(q, [req.body.email], (err, data) => {
     if (err) return res.json(err);
     if(data.length === 0) return res.status(404).json("User not found!");
 
     //check password
     const isPasswordCorrect = bcrypt.compareSync(req.body.password, data[0].password);
 
-    if(!isPasswordCorrect) return res.status(400).json("Wrong username or password!");
+    if(!isPasswordCorrect) return res.status(400).json("Wrong email or password!");
 
     const token = jwt.sign({user_id:data[0].user_id}, "jwtkey");
     const {password, ...other} = data[0]
