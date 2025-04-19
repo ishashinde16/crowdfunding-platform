@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { UserContext } from "E:/ISL website/crowdfunding-platform/client/src/App.jsx";
+import { UserContext } from "../App.jsx";
 import axios from 'axios';
 
 const Campaign = () => {
@@ -136,17 +136,25 @@ const Campaign = () => {
         </div>
 
         <div style={{ marginBottom: '15px' }}>
-          <label htmlFor="category">Category:</label>
-          <input
-            type="text"
-            id="category"
-            name="category"
-            value={campaignData.category}
-            onChange={handleChange}
-            required
-            style={{ width: '100%', padding: '8px' }}
-          />
-        </div>
+  <label htmlFor="category">Category:</label>
+  <select
+    id="category"
+    name="category"
+    value={campaignData.category}
+    onChange={handleChange}
+    required
+    style={{ width: '100%', padding: '8px' }}
+  >
+    <option value="">-- Select a Category --</option>
+    <option value="HealthCare">HealthCare</option>
+    <option value="Business">Business</option>
+    <option value="Arts">Arts</option>
+    <option value="Education">Education</option>
+    <option value="Social">Social</option>
+    <option value="Miscellaneous">Miscellaneous</option>
+  </select>
+</div>
+
 
         <div style={{ marginBottom: '15px' }}>
           <label htmlFor="image">Image URL:</label>

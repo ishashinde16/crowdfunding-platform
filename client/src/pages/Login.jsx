@@ -3,7 +3,7 @@ import {Link, useNavigate} from 'react-router-dom'
 import { useState } from 'react'
 import axios from "axios"
 import { useContext } from "react";
-import { UserContext } from "E:/ISL website/crowdfunding-platform/client/src/App.jsx";
+import { UserContext } from "../App.jsx";
 
 const Login = (props) => {
   const [inputs, setInputs] = useState({
@@ -35,7 +35,7 @@ const Login = (props) => {
 
   return (
     <div className='auth'>
-        <h1>Email</h1>
+        <h1>Login</h1>
         <form>
         <input required type="text" placeholder='email' name='email' onChange={handleChange}/>
             <input required type="password" placeholder='password' name='password' onChange={handleChange}/>
