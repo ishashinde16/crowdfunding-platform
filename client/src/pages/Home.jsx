@@ -1,66 +1,65 @@
-import React from 'react'
-import {Link} from 'react-router-dom'
+import React, { useEffect, useState } from 'react'
+import { Link, useLocation } from 'react-router-dom'
+import axios from "axios"
+import "../style.scss"
 
 const Home = () => {
+  const [campaigns, setCampaigns] = useState([]);
+  const cat = useLocation().search; // Example: "?cat=medical"
 
-  const posts = [
-    
-      {
-        id: 1,
-        title: "Solar for Schools",
-        desc: "Help install solar panels in rural schools to bring sustainable energy and brighter futures.",
-        img: "https://www.iamrenew.com/wp-content/uploads/2019/07/School-buiding-1280x720.jpg"
-      },
-      {
-        id: 2,
-        title: "The Indie Game Project",
-        desc: "Support a passionate team of developers creating a retro-inspired adventure game.",
-        img: "https://www.northeasternchronicle.in/wp-content/uploads/2024/06/Gaming-696x464.jpg"
-      },
-      {
-        id: 3,
-        title: "Clean Water for All",
-        desc: "Join the mission to bring clean drinking water to underserved communities worldwide.",
-        img: "https://www.halma.in/~/media/Files/H/Halma/India/press-releases/WFL_children%20in%20Bihar.jpg?h=541&w=811"
-      },
-      {
-        id: 4,
-        title: "Next-Gen Smartwatch",
-        desc: "Back the next generation of wearable tech — sleek, powerful, and budget-friendly.",
-        img: "https://i.ytimg.com/vi/_BRT_0N1uLA/maxresdefault.jpg"
-      },
-      {
-        id: 5,
-        title: "Artists Unleashed",
-        desc: "Fund independent artists and help bring bold, original art to life in local galleries.",
-        img: "https://blog.sothebysrealty.co.uk/hubfs/Imported_Blog_Media/a66510b8-b14b-4ce5-8f43-beaec82e0bcb-1.jpg"
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const res = await axios.get(`http://localhost:8800/api/campaigns${cat}`);
+        setCampaigns(res.data);
+      } catch (err) {
+        console.log(err);
       }
-    
-    
-  ]
+    };
+
+    fetchData();
+  }, [cat]);
+
   return (
     <div className='home'>
       <div className='posts'>
-        {posts.map(post=>(
-          <div className='post' key={post.id}>
-            <div className='img'>
-              <img src={post.img} alt="" />
-            </div>
-            <div className='content'>
-              <Link className='link' to={`/post/${post.id}`}>
-              <h1>{post.title}</h1>
-              </Link>
-              <p>{post.desc}</p>
-              <div className='button-group'>
-              <button>Know More</button>
-              <button>Contribute Now</button>
+        {campaigns.map(campaign => {
+          const percentage = Math.min((campaign.current_amount / campaign.amount_req) * 100, 100); // Cap at 100%
+          
+          return (
+            <div className='post' key={campaign.campaign_id}>
+              <div className='img'>
+                <img src={campaign.img} alt={campaign.title} />
+              </div>
+              <div className='content'>
+                <Link className='link' to={`/campaign/${campaign.campaign_id}`}>
+                  <h1>{campaign.title}</h1>
+                </Link>
+                <p>{campaign.description}</p>
+                
+                <div className="progress-bar-container">
+                  <div className="progress-bar">
+                    <div className="filled" style={{ width: `${percentage}%` }}></div>
+                  </div>
+                  <div className="progress-text">
+                    ₹{campaign.current_amount} raised of ₹{campaign.amount_req}
+                  </div>
+                </div>
+
+                <div className='deadline'>
+                  Deadline: {new Date(campaign.deadline).toLocaleDateString()}
+                </div>
+
+                <div className='button-group'>
+                  <button>Contribute Now</button>
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
-  )
+  );
 }
 
-export default Home
+export default Home;
