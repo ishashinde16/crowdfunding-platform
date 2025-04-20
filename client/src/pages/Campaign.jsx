@@ -169,7 +169,7 @@ const Campaign = () => {
           />
         </div>
 
-        <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#4CAF50', color: '#fff', border: 'none', cursor: 'pointer' }}>
+        <button type="submit" style={{ padding: '10px 20px', backgroundColor: '#b9e7e7', color: 'black', border: '1px solid teal', cursor: 'pointer' }}>
           Submit Campaign
         </button>
       </form>

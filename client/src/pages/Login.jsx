@@ -26,6 +26,7 @@ const Login = (props) => {
       const res = await axios.post("http://localhost:8800/api/auth/login", inputs)
       navigate("/")
       console.log(res)
+      
     }
     catch(err){
       setError(err.response.data);

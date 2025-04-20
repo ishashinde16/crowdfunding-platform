@@ -29,7 +29,7 @@ const Home = () => {
           return (
             <div className='post' key={campaign.campaign_id}>
               <div className='img'>
-                <img src={campaign.imgage} alt={campaign.title} />
+                <img src={campaign.image} alt={campaign.title} />
               </div>
               <div className='content'>
                 <Link className='link' to={`/campaign/${campaign.campaign_id}`}>

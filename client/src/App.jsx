@@ -12,6 +12,7 @@ import Campaign from "./pages/Campaign";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./style.scss";
+import ProtectedRoute from "./components/ProtectedRoute";
 
 // ✅ Create context
 export const UserContext = createContext();
@@ -19,11 +20,13 @@ export const UserContext = createContext();
 // ✅ Layout component
 const Layout = () => {
   return (
-    <>
-      <Navbar />
-      <Outlet />
-      <Footer />
-    </>
+    <ProtectedRoute>
+      <>
+        <Navbar />
+        <Outlet />
+        <Footer />
+      </>
+    </ProtectedRoute>
   );
 };
 
