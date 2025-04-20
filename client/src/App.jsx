@@ -2,22 +2,20 @@ import {
   createBrowserRouter,
   RouterProvider,
   Outlet,
-} from "react-router-dom"; // 🔁 use react-router-dom, not "react-router"
+} from "react-router-dom";
 import React, { useState, useContext, useEffect, createContext } from 'react';
 import Register from "./pages/Register";
 import Login from "./pages/Login";
-import Single from "./pages/Single";
 import Home from "./pages/Home";
 import Campaign from "./pages/Campaign";
+import Contribute from "./pages/Contribute";
 import Navbar from "./components/Navbar";
 import Footer from "./components/Footer";
 import "./style.scss";
 import ProtectedRoute from "./components/ProtectedRoute";
 
-// ✅ Create context
 export const UserContext = createContext();
 
-// ✅ Layout component
 const Layout = () => {
   return (
     <ProtectedRoute>
@@ -30,7 +28,6 @@ const Layout = () => {
   );
 };
 
-// ✅ Define router
 const router = createBrowserRouter([
   {
     path: "/",
@@ -41,8 +38,8 @@ const router = createBrowserRouter([
         element: <Home />,
       },
       {
-        path: "/post/:id",
-        element: <Single />,
+        path: "/Contribute/:campaignId", // Add route for contribute page
+        element: <Contribute />, // Component for the contribute page
       },
       {
         path: "/campaign",
@@ -57,26 +54,24 @@ const router = createBrowserRouter([
   {
     path: "/login",
     element: <Login />,
-  },
+  }
 ]);
 
-// ✅ App component with context
 function App() {
   const [email, setEmail] = useState("");
 
   useEffect(() => {
     const savedEmail = localStorage.getItem("email");
-    console.log("Retrieved email from localStorage:", savedEmail); // Log email
+    console.log("Retrieved email from localStorage:", savedEmail);
     if (savedEmail) {
-      setEmail(JSON.parse(savedEmail)); // Set email if it exists in localStorage
+      setEmail(JSON.parse(savedEmail));
     }
   }, []);
 
-  // Save email to localStorage when it changes
   useEffect(() => {
     if (email) {
-      console.log("Saving email to localStorage:", email); // Log email
-      localStorage.setItem("email", JSON.stringify(email)); // Save email when it changes
+      console.log("Saving email to localStorage:", email);
+      localStorage.setItem("email", JSON.stringify(email));
     }
   }, [email]);
 

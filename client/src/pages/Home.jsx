@@ -1,11 +1,12 @@
-import React, { useEffect, useState } from 'react'
-import { Link, useLocation } from 'react-router-dom'
-import axios from "axios"
-import "../style.scss"
+import React, { useEffect, useState } from 'react';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
+import axios from "axios";
+import "../style.scss";
 
 const Home = () => {
   const [campaigns, setCampaigns] = useState([]);
   const cat = useLocation().search; // Example: "?cat=medical"
+  const navigate = useNavigate(); // Hook for navigation
 
   useEffect(() => {
     const fetchData = async () => {
@@ -19,6 +20,11 @@ const Home = () => {
 
     fetchData();
   }, [cat]);
+
+  // Function to handle "Contribute Now" button click
+  const handleContributeClick = (campaignId) => {
+    navigate(`/Contribute/${campaignId}`); // Navigate to Contribute page with campaign ID
+  };
 
   return (
     <div className='home'>
@@ -51,7 +57,7 @@ const Home = () => {
                 </div>
 
                 <div className='button-group'>
-                  <button>Contribute Now</button>
+                  <button onClick={() => handleContributeClick(campaign.campaign_id)}>Contribute Now</button>
                 </div>
               </div>
             </div>
