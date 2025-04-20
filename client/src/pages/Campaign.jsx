@@ -25,6 +25,13 @@ const Campaign = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const imageUrl = campaignData.image.trim();
+  const isValidImageUrl = /^https:\/\/.*\.(jpg|jpeg|png)$/i.test(imageUrl);
+  
+  if (!isValidImageUrl) {
+    alert('Please enter a valid image URL that starts with https and ends with .jpg, .jpeg, or .png');
+    return;
+  }
     console.log('Email: ', email);
     console.log('Campaign Data:', campaignData);
     // Prepare the data to send to the backend
