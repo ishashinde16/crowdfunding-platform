@@ -29,25 +29,46 @@ export const register = (req, res) => {
   });
 };
 
-export const login = (req, res) => {
+// export const login = (req, res) => {
   
-  //CHECK USER
-  const q = "SELECT * from users WHERE email=?"
-  db.query(q, [req.body.email], (err, data) => {
+//   //CHECK USER
+//   const q = "SELECT * from users WHERE email=?"
+//   db.query(q, [req.body.email], (err, data) => {
+//     if (err) return res.json(err);
+//     if(data.length === 0) return res.status(404).json("User not found!");
+
+//     //check password
+//     const isPasswordCorrect = bcrypt.compareSync(req.body.password, data[0].password);
+
+//     if(!isPasswordCorrect) return res.status(400).json("Wrong email or password!");
+
+//     const token = jwt.sign({user_id:data[0].user_id}, "jwtkey");
+//     const {password, ...other} = data[0]
+
+//     res.cookie("access_token", token, {httpOnly:true}).status(200).json(other)
+//   });
+// };
+
+export const login = (req, res) => {
+  // ❌ Vulnerable: directly embedding user input
+  const q = `SELECT * FROM users WHERE email = '${req.body.email}'`;
+
+  db.query(q, (err, data) => {
     if (err) return res.json(err);
-    if(data.length === 0) return res.status(404).json("User not found!");
+    if (data.length === 0) return res.status(404).json("User not found!");
 
     //check password
     const isPasswordCorrect = bcrypt.compareSync(req.body.password, data[0].password);
 
-    if(!isPasswordCorrect) return res.status(400).json("Wrong email or password!");
+    if (!isPasswordCorrect) return res.status(400).json("Wrong email or password!");
 
-    const token = jwt.sign({user_id:data[0].user_id}, "jwtkey");
-    const {password, ...other} = data[0]
+    const token = jwt.sign({ user_id: data[0].user_id }, "jwtkey");
+    const { password, ...other } = data[0];
 
-    res.cookie("access_token", token, {httpOnly:true}).status(200).json(other)
+    res.cookie("access_token", token, { httpOnly: true }).status(200).json(other);
   });
 };
+
 
 export const logout = (req, res) => {
   // Implement logout later
